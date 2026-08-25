@@ -7,6 +7,11 @@ comments, a live activity log, and real-time WebSocket notifications.
 - **Backend:** Java 17, Spring Boot 4 (Web, Security, Data JPA, WebSocket), JWT (jjwt)
 - **Frontend:** Angular 18 (standalone components), Bootstrap 5, Bootstrap Icons, STOMP over SockJS
 - **Database:** MySQL / MariaDB (chosen for a production-like setup — see below)
+🎥 Demo Video
+
+Watch the Project Demo
+
+https://drive.google.com/file/d/1EQC2LggbfuI2kzX30kUC20mgJkHOGgTY/view?usp=sharing
 
 ## Project Structure
 
