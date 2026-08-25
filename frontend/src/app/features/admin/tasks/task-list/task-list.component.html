@@ -1,0 +1,139 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Task Management</h2>
+  <button class="btn btn-primary" (click)="openCreateModal()">
+    <i class="bi bi-plus-lg me-1"></i>New Task
+  </button>
+</div>
+
+<div class="card border-0 shadow-sm mb-3">
+  <div class="card-body">
+    <div class="row g-2">
+      <div class="col-md-5">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by title..."
+          [(ngModel)]="searchTerm"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="applyFilters()"
+        />
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="statusFilter" [ngModelOptions]="{ standalone: true }" (change)="applyFilters()">
+          <option value="">All Statuses</option>
+          @for (s of statuses; track s) {
+            <option [value]="s">{{ s }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" [(ngModel)]="userFilter" [ngModelOptions]="{ standalone: true }" (change)="applyFilters()">
+          <option value="">All Users</option>
+          @for (u of users; track u.id) {
+            <option [value]="u.id">{{ u.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Title</th>
+          <th>Assigned To</th>
+          <th>Status</th>
+          <th>Due Date</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading) {
+          <tr><td colspan="5" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+        } @else {
+          @for (task of filteredTasks; track task.id) {
+            <tr>
+              <td><a [routerLink]="['/admin/tasks', task.id]">{{ task.title }}</a></td>
+              <td>{{ task.assignedUserName }}</td>
+              <td><span class="badge" [ngClass]="statusBadgeClass(task.status)">{{ task.status }}</span></td>
+              <td>{{ task.dueDate || '-' }}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditModal(task)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="text-center text-muted py-4">No tasks found</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form [formGroup]="form" (ngSubmit)="save()">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ editingTask ? 'Edit Task' : 'New Task' }}</h5>
+            <button type="button" class="btn-close" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            @if (errorMessage) {
+              <div class="alert alert-danger py-2 small">{{ errorMessage }}</div>
+            }
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input type="text" class="form-control" formControlName="title" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="3" formControlName="description"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Assign To</label>
+              <select class="form-select" formControlName="assignedUserId">
+                <option [ngValue]="null" disabled>Select a user</option>
+                @for (u of users; track u.id) {
+                  <option [ngValue]="u.id">{{ u.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Status</label>
+                <select class="form-select" formControlName="status">
+                  @for (s of statuses; track s) {
+                    <option [value]="s">{{ s }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-control" formControlName="dueDate" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+              @if (saving) {
+                <span class="spinner-border spinner-border-sm me-1"></span>
+              }
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

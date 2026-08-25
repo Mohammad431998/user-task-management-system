@@ -1,0 +1,14 @@
+.notification-panel {
+  width: 340px;
+  max-width: 90vw;
+}
+
+.notification-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  white-space: normal;
+}

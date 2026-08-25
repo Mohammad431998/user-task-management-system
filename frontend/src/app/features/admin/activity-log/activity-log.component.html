@@ -1,0 +1,34 @@
+<h2 class="mb-4">Activity Log <span class="badge bg-success-subtle text-success-emphasis fs-6 align-middle ms-2">Live</span></h2>
+
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Entity</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading) {
+          <tr><td colspan="5" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+        } @else {
+          @for (log of logs; track log.id) {
+            <tr>
+              <td class="small text-muted">{{ log.createdAt | date: 'medium' }}</td>
+              <td>{{ log.userId ? 'User #' + log.userId : 'System' }}</td>
+              <td><span class="badge" [ngClass]="actionBadgeClass(log.action)">{{ log.action }}</span></td>
+              <td>{{ log.entityType }} @if (log.entityId) { #{{ log.entityId }} }</td>
+              <td>{{ log.description }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="text-center text-muted py-4">No activity recorded yet</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

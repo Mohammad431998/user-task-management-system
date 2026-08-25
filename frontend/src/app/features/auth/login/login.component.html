@@ -1,0 +1,48 @@
+<div class="login-page d-flex align-items-center justify-content-center">
+  <div class="card shadow login-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center mb-4">
+        <i class="bi bi-check2-square display-4 text-primary"></i>
+        <h3 class="mt-2 mb-0">Task Manager</h3>
+        <p class="text-muted small">Sign in to continue</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="username"
+            [class.is-invalid]="form.get('username')?.invalid && form.get('username')?.touched"
+            placeholder="Enter your username"
+          />
+          <div class="invalid-feedback">Username is required.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+            placeholder="Enter your password"
+          />
+          <div class="invalid-feedback">Password is required.</div>
+        </div>
+
+        @if (errorMessage) {
+          <div class="alert alert-danger py-2 small">{{ errorMessage }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          }
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

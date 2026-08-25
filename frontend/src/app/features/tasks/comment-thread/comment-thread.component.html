@@ -1,0 +1,32 @@
+@for (comment of comments; track comment.id) {
+  <div class="comment" [style.margin-left.px]="depth * 28">
+    <div class="d-flex">
+      <div class="avatar me-2">{{ initials(comment.userName) }}</div>
+      <div class="flex-grow-1">
+        <div class="comment-bubble">
+          <div class="d-flex justify-content-between">
+            <strong class="small">{{ comment.userName }}</strong>
+            <span class="text-muted x-small">{{ formatDate(comment.createdAt) }}</span>
+          </div>
+          <div class="mt-1">{{ comment.comment }}</div>
+        </div>
+        <div class="mt-1">
+          <button class="btn btn-link btn-sm p-0 me-3" (click)="reply.emit(comment)">Reply</button>
+          @if (isAdmin) {
+            <button class="btn btn-link btn-sm p-0 text-danger" (click)="remove.emit(comment)">Delete</button>
+          }
+        </div>
+
+        @if (comment.replies.length) {
+          <app-comment-thread
+            [comments]="comment.replies"
+            [isAdmin]="isAdmin"
+            [depth]="depth + 1"
+            (reply)="reply.emit($event)"
+            (remove)="remove.emit($event)"
+          />
+        }
+      </div>
+    </div>
+  </div>
+}

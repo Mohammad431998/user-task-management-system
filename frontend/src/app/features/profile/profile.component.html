@@ -1,0 +1,76 @@
+<h2 class="mb-4">My Profile</h2>
+
+@if (loading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+} @else {
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-4">
+            <div class="avatar-lg me-3">{{ profile?.name?.charAt(0) }}</div>
+            <div>
+              <h5 class="mb-0">{{ profile?.name }}</h5>
+              <span class="badge text-bg-secondary">{{ profile?.roleName }}</span>
+            </div>
+          </div>
+
+          @if (successMessage) {
+            <div class="alert alert-success py-2 small">{{ successMessage }}</div>
+          }
+          @if (errorMessage) {
+            <div class="alert alert-danger py-2 small">{{ errorMessage }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+              />
+              <div class="invalid-feedback">Name is required.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+              />
+              <div class="invalid-feedback">Enter a valid, unique email address.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                Password <span class="text-muted small">(re-enter current password, or set a new one)</span>
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+              />
+              <div class="invalid-feedback">
+                Password must be 8+ characters and include an uppercase letter, lowercase letter, number and symbol.
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+              @if (saving) {
+                <span class="spinner-border spinner-border-sm me-1"></span>
+              }
+              Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}

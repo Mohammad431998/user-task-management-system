@@ -1,0 +1,52 @@
+<nav class="navbar navbar-dark bg-primary px-3 shadow-sm">
+  <span class="navbar-brand mb-0 h1">
+    <i class="bi bi-check2-square me-2"></i>Task Manager
+  </span>
+  <div class="d-flex align-items-center gap-3">
+    <app-notification-bell />
+    <div class="dropdown">
+      <button
+        class="btn btn-link text-white text-decoration-none dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+      >
+        <i class="bi bi-person-circle me-1"></i>{{ authService.currentUser()?.name }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+        <li><hr class="dropdown-divider" /></li>
+        <li><button class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="d-flex">
+  <aside class="sidebar bg-dark text-white p-3">
+    @if (authService.isAdmin()) {
+      <a class="sidebar-link" routerLink="/admin/dashboard" routerLinkActive="active">
+        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+      </a>
+      <a class="sidebar-link" routerLink="/admin/users" routerLinkActive="active">
+        <i class="bi bi-people me-2"></i>Users
+      </a>
+      <a class="sidebar-link" routerLink="/admin/tasks" routerLinkActive="active">
+        <i class="bi bi-list-task me-2"></i>Tasks
+      </a>
+      <a class="sidebar-link" routerLink="/admin/activity-log" routerLinkActive="active">
+        <i class="bi bi-clock-history me-2"></i>Activity Log
+      </a>
+    } @else {
+      <a class="sidebar-link" routerLink="/user/dashboard" routerLinkActive="active">
+        <i class="bi bi-list-check me-2"></i>My Tasks
+      </a>
+    }
+    <a class="sidebar-link" routerLink="/profile" routerLinkActive="active">
+      <i class="bi bi-person-gear me-2"></i>Profile
+    </a>
+  </aside>
+
+  <main class="content flex-grow-1 p-4">
+    <router-outlet />
+  </main>
+</div>
